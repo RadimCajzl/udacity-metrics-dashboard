@@ -11,7 +11,18 @@
 *TODO:* Create a dashboard in Grafana that shows Prometheus as a source. Take a screenshot and include it here.
 
 ## Describe SLO/SLI
-*TODO:* Describe, in your own words, what the SLIs are, based on an SLO of *monthly uptime* and *request response time*.
+*Describe, in your own words, what the SLIs are, based on an SLO of monthly uptime and request response time.*
+
+Service level indicators report the actual performance so that it can be directly compared to SLO.
+
+Examples:
+ - *monthly uptime*:
+   - typical SLO: "service XYZ will be up for at least 99.9% time in any given month".
+   - corresponding SLI: "service XYZ was up for 99.93% time during June 2023".
+ - *request response time*:
+   - typical SLO: "every day, 99% of requests will be served within 100ms".
+   - corresponding SLI: "on June 13th 2023, 99% of requests were served within 84ms".
+     Alternative formulation: "on June 13th 2023, 99th percentile of request response time was 84ms". 
 
 ## Creating SLI metrics.
 *TODO:* It is important to know why we want to measure certain metrics for our customer. Describe in detail 5 metrics to measure these SLIs. 
