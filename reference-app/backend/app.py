@@ -8,7 +8,7 @@ app.config["MONGO_DBNAME"] = "example-mongodb"
 app.config[
     "MONGO_URI"
 ] = "mongodb://example-mongodb-svc.default.svc.cluster.local:27017/example-mongodb"
-metrics = PrometheusMetrics(app)
+metrics = PrometheusMetrics(app, default_labels={"app": "frontend"})
 
 mongo = PyMongo(app)
 

@@ -1,6 +1,8 @@
 - job_name: 'backend-metrics'
+  scrape_interval: 5s
   static_configs:
     - targets: ['backend-service.default.svc.cluster.local:8081']
 - job_name: 'frontend-metrics'
+  scrape_interval: 5s
   static_configs:
     - targets: ['frontend-service.default.svc.cluster.local:8080']
