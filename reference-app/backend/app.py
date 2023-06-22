@@ -1,7 +1,6 @@
-from flask import Flask, render_template, request, jsonify
-
-import pymongo
+from flask import Flask, jsonify, request
 from flask_pymongo import PyMongo
+from prometheus_flask_exporter import PrometheusMetrics
 
 app = Flask(__name__)
 
@@ -9,6 +8,7 @@ app.config["MONGO_DBNAME"] = "example-mongodb"
 app.config[
     "MONGO_URI"
 ] = "mongodb://example-mongodb-svc.default.svc.cluster.local:27017/example-mongodb"
+metrics = PrometheusMetrics(app)
 
 mongo = PyMongo(app)
 
