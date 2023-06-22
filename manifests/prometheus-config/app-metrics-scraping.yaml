@@ -1,0 +1,6 @@
+- job_name: 'backend-metrics'
+  static_configs:
+    - targets: ['backend-service.default.svc.cluster.local:8081']
+- job_name: 'frontend-metrics'
+  static_configs:
+    - targets: ['frontend-service.default.svc.cluster.local:8080']
