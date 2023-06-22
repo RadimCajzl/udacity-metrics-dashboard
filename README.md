@@ -95,7 +95,29 @@ Examples:
    
 
 ## Create a Dashboard to measure our SLIs
-*TODO: Create a dashboard to measure the uptime of the frontend and backend services. We will also want to measure to measure 40x and 50x errors. Create a dashboard that show these values over a 24 hour period and take a screenshot.*
+*Create a dashboard to measure the uptime of the frontend and backend services. We will also want to measure to measure 40x and 50x errors. Create a dashboard that show these values over a 24 hour period and take a screenshot.*
+
+Exported dashboard code can be found in `grafana/app_dashboard.json`.
+
+  - Uptime is measured using out-of-the-box provided metrics `container_start_time_seconds`, filtered on our app containers.
+  
+  Following query does the trick:
+  ```min(time() - container_start_time_seconds{image=\"docker.io/radimcajzl/udacity-metrics-backend:latest\"})```
+  The query inside `min` call returns several time series, coming from the fact we have multiple replicas.
+  By using min we are sure to get uptime of the shortest-running instance.
+
+ - In order to get HTTP status codes into Prometheus, I dediced to modify the apps to expose standard Flask metrics
+ using [prometheus_flask_exporter package](https://github.com/rycus86/prometheus_flask_exporter).
+ This by default exposes `flask_http_request_total` metrics counting number of requests with additional tags, e. g.
+ the http status codes. I have added custom tag `app`, which distinguishes frontend and backend.
+ 
+ Queries in the following format are used for the dashboard:
+ ```flask_http_request_total{app=\"frontend\", status=~\"5..\"}```
+
+**Screenshot with 24h-dashboard**: ![App dashboard 24h](answer-img/app-dashboard-24h.png)
+
+**Screenshot with 30min-dashboard** (Added for reviewer-convenience as the 24h-dashboard has quite large gap with no data.):
+![App dashboard 24h](answer-img/app-dashboard-30min.png)
 
 ## Tracing our Flask App
 *TODO:*  We will create a Jaeger span to measure the processes on the backend. Once you fill in the span, provide a screenshot of it here. Also provide a (screenshot) sample Python file containing a trace and span code used to perform Jaeger traces on the backend service.

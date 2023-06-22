@@ -1,4 +1,4 @@
-all: kind-init kind-jaeger kind-apps kind-prometheus
+all: kind-init kind-jaeger kind-apps kind-prometheus kind-apps-traffic
 
 kind-init:
 	kind create cluster --name kind --config=kind/config.yaml
@@ -66,10 +66,6 @@ kind-apps: kind-apps-clean
 	kind load docker-image radimcajzl/udacity-metrics-frontend:latest
 	kubectl apply -f manifests/app
 	kubectl wait deployment frontend-app -n default --for condition=Available=True --timeout=900s
-	kubectl port-forward svc/frontend-service 8080:8080 &
-
-	# # add scrape job for custom endpoint from prometheus:
-	# kubectl patch prometheus/prometheus-kube-prometheus-prometheus -n monitoring --patch-file='manifests/prometheus-config/app-metrics-scraping.yaml'
 
 kind-apps-clean:
 	kubectl delete deployment/backend-app --ignore-not-found=true
@@ -77,5 +73,16 @@ kind-apps-clean:
 	kubectl delete deployment/frontend-app --ignore-not-found=true
 	kubectl delete service/frontend-service --ignore-not-found=true
 	
-	# break port-forwarding:
-	curl localhost:8080 || echo Port-forwarding to frontend stopped.
+kind-apps-traffic:
+	## normal traffic:
+	# Frontend:
+	for idx in `seq 1 100`; do curl http://localhost:31080/ > /dev/null 2> /dev/null; done
+	# Backend:
+	for idx in `seq 1 100`; do curl http://localhost:31081/api > /dev/null 2> /dev/null; done
+	
+	## errors traffic:
+	# Frontend:
+	for idx in `seq 1 50`; do curl http://localhost:31080/this_does_not_exist > /dev/null 2> /dev/null; done
+	# Backend:
+	for idx in `seq 1 42`; do curl http://localhost:31081/neither_does_this > /dev/null 2> /dev/null; done
+	for idx in `seq 1 10`; do curl -X POST http://localhost:31081/star -H "Content-Type: application/json" -d '{"ahoj":"nazdar"}' > /dev/null 2> /dev/null; done
