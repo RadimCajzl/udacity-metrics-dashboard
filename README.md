@@ -149,21 +149,39 @@ in such setup, which allows us to directly see more details for each 500 error f
 
 
 ## Report Error
-*TODO:* Using the template below, write a trouble ticket for the developers, to explain the errors that you are seeing (400, 500, latency) and to let them know the file that is causing the issue also include a screenshot of the tracer span to demonstrate how we can user a tracer to locate errors easily.
+*Using the template below, write a trouble ticket for the developers, to explain the errors that you are seeing (400, 500, latency) and to let them know the file that is causing the issue also include a screenshot of the tracer span to demonstrate how we can user a tracer to locate errors easily.*
 
 TROUBLE TICKET
 
-Name:
+Name: Radim Cajzl
 
-Date:
+Date: 2023-06-23
 
-Subject:
+Subject: /star endpoint on app-backend service returns 500 errors due to bad request parsing
 
-Affected Area:
+Affected Area: One Page Wonder app
 
-Severity:
+Severity: Serious (severely reduces user experience)
 
 Description:
+Dear backend developers, since the backend service has been updated, our mobile app users report
+the "star" functionality no longer works. Our monitoring shows a large numbers of 500 errors
+on our backend service connected to /star endpoint.
+
+Corresponding trace (see below) looks like it fails to parse request body in `reference-app/backend/app.py`.
+Is it possible that the expected request format has been changed recently?
+
+May I ask you for a quick fix (e. g. reverting to the previous request format) and for
+a long term solution (e. g. to make sure all client-app-teams have implemented the new
+request format and proper transition period has been in place)?
+
+Steps to reproduce: run following curl command:
+```
+curl http://localhost:31081/star -H "Content-Type: application/json" -d '{"id":"test", "distance": 10}'
+```
+
+**Trace screenshot**:  
+![Jaeger dashboard](answer-img/trouble_ticket_trace.png)
 
 
 ## Creating SLIs and SLOs
