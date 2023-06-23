@@ -114,13 +114,27 @@ Exported dashboard code can be found in `grafana/app_dashboard.json`.
  Queries in the following format are used for the dashboard:
  ```flask_http_request_total{app=\"frontend\", status=~\"5..\"}```
 
-**Screenshot with 24h-dashboard**: ![App dashboard 24h](answer-img/app-dashboard-24h.png)
+**Screenshot with 24h-dashboard**:  
+![App dashboard 24h](answer-img/app-dashboard-24h.png)
 
-**Screenshot with 30min-dashboard** (Added for reviewer-convenience as the 24h-dashboard has quite large gap with no data.):
+**Screenshot with 30min-dashboard** (Added for reviewer-convenience as the 24h-dashboard has quite large gap with no data.):  
 ![App dashboard 24h](answer-img/app-dashboard-30min.png)
 
 ## Tracing our Flask App
-*TODO:*  We will create a Jaeger span to measure the processes on the backend. Once you fill in the span, provide a screenshot of it here. Also provide a (screenshot) sample Python file containing a trace and span code used to perform Jaeger traces on the backend service.
+*TODO: We will create a Jaeger span to measure the processes on the backend. Once you fill in the span, provide a screenshot of it here. Also provide a (screenshot) sample Python file containing a trace and span code used to perform Jaeger traces on the backend service.*
+
+To add telemetry, we implemented a similar solution as described on [CNCF blog](https://www.cncf.io/blog/2022/04/22/).
+Jaeger exports are handled by `opentelemetry.instrumentation.flask.FlaskInstrumentor`, as described in
+[OpenTelemetry documentation](https://opentelemetry-python.readthedocs.io/en/latest/exporter/jaeger/jaeger.html).
+We use automatic [Flask OpenTelemetry integration](https://opentelemetry-python-contrib.readthedocs.io/en/latest/instrumentation/flask/flask.html) to get automatic traces from Flask endpoints.
+Next to that, we define our own span.
+
+**Jaeger span screenshot**:  
+![Jaeger span](answer-img/jaeger-span.png)
+**Python code producing the span** (see `reference-app/backend/app.py` and `reference-app/backend/telemetry.py`):  
+
+![Jaeger span code](answer-img/jaeger-span-code.png)
+
 
 ## Jaeger in Dashboards
 *TODO:* Now that the trace is running, let's add the metric to our current Grafana dashboard. Once this is completed, provide a screenshot of it here.

@@ -67,11 +67,24 @@ kind-apps: kind-apps-clean
 	kubectl apply -f manifests/app
 	kubectl wait deployment frontend-app -n default --for condition=Available=True --timeout=900s
 
+	kubectl wait deployment jaeger-app -n default --for condition=Available=True --timeout=900s
+	kubectl port-forward -n default service/jaeger-app-query 16686:16686 &
+
 kind-apps-clean:
 	kubectl delete deployment/backend-app --ignore-not-found=true
 	kubectl delete service/backend-service --ignore-not-found=true
 	kubectl delete deployment/frontend-app --ignore-not-found=true
 	kubectl delete service/frontend-service --ignore-not-found=true
+
+	kubectl delete jaeger/jaeger-app --ignore-not-found=true
+	kubectl delete deployment/jaeger-app --ignore-not-found=true
+	kubectl delete service/jaeger-app-agent --ignore-not-found=true
+	kubectl delete service/jaeger-app-collector --ignore-not-found=true
+	kubectl delete service/jaeger-app-collector-headless --ignore-not-found=true
+	kubectl delete service/jaeger-app-query --ignore-not-found=true
+
+	# break port-forwarding:
+	curl localhost:16686 || echo Port-forwarding to Jaeger stopped.
 	
 kind-apps-traffic:
 	## normal traffic:

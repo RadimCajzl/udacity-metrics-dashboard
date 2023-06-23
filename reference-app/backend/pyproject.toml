@@ -13,6 +13,9 @@ gunicorn = "^20.1.0"
 pymongo = "^4.3.3"
 flask-pymongo = "^2.3.0"
 prometheus-flask-exporter = "^0.22.4"
+opentelemetry-distro = "^0.39b0"
+opentelemetry-exporter-jaeger-thrift = "^1.18.0"
+opentelemetry-instrumentation-flask = "^0.39b0"
 
 [tool.poetry.group.dev.dependencies]
 isort = "^5.12.0"
