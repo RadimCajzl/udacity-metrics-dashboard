@@ -121,7 +121,7 @@ Exported dashboard code can be found in `grafana/app_dashboard.json`.
 ![App dashboard 24h](answer-img/app-dashboard-30min.png)
 
 ## Tracing our Flask App
-*TODO: We will create a Jaeger span to measure the processes on the backend. Once you fill in the span, provide a screenshot of it here. Also provide a (screenshot) sample Python file containing a trace and span code used to perform Jaeger traces on the backend service.*
+*We will create a Jaeger span to measure the processes on the backend. Once you fill in the span, provide a screenshot of it here. Also provide a (screenshot) sample Python file containing a trace and span code used to perform Jaeger traces on the backend service.*
 
 To add telemetry, we implemented a similar solution as described on [CNCF blog](https://www.cncf.io/blog/2022/04/22/).
 Jaeger exports are handled by `opentelemetry.instrumentation.flask.FlaskInstrumentor`, as described in
@@ -137,7 +137,16 @@ Next to that, we define our own span.
 
 
 ## Jaeger in Dashboards
-*TODO:* Now that the trace is running, let's add the metric to our current Grafana dashboard. Once this is completed, provide a screenshot of it here.
+*Now that the trace is running, let's add the metric to our current Grafana dashboard. Once this is completed, provide a screenshot of it here.*
+
+To add Jaeger traces to Grafana dashboard, a new data source must be added to grafana at first at Connections -> Your connections.
+For Jaeger defined in our `manifests/app/jaeger.yaml` file, the corresponding URL is `http://jaeger-app-query.default.svc.cluster.local:16686`.
+
+We have added all traces labeled with `http.status_code=500` from our backend service, as table. Grafana provides clickable links
+in such setup, which allows us to directly see more details for each 500 error from our backends service.
+
+![Jaeger dashboard](answer-img/jaeger-dashboard.png)
+
 
 ## Report Error
 *TODO:* Using the template below, write a trouble ticket for the developers, to explain the errors that you are seeing (400, 500, latency) and to let them know the file that is causing the issue also include a screenshot of the tracer span to demonstrate how we can user a tracer to locate errors easily.
