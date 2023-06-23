@@ -89,13 +89,13 @@ kind-apps-clean:
 kind-apps-traffic:
 	## normal traffic:
 	# Frontend:
-	for idx in `seq 1 100`; do curl http://localhost:31080/ > /dev/null 2> /dev/null; done
+	for idx in `seq 1 1000`; do curl http://localhost:31080/ > /dev/null 2> /dev/null & done
 	# Backend:
-	for idx in `seq 1 100`; do curl http://localhost:31081/api > /dev/null 2> /dev/null; done
+	for idx in `seq 1 1000`; do curl http://localhost:31081/api > /dev/null 2> /dev/null &  done
 	
 	## errors traffic:
 	# Frontend:
-	for idx in `seq 1 50`; do curl http://localhost:31080/this_does_not_exist > /dev/null 2> /dev/null; done
+	for idx in `seq 1 50`; do curl http://localhost:31080/this_does_not_exist > /dev/null 2> /dev/null &  done
 	# Backend:
-	for idx in `seq 1 42`; do curl http://localhost:31081/neither_does_this > /dev/null 2> /dev/null; done
-	for idx in `seq 1 10`; do curl -X POST http://localhost:31081/star -H "Content-Type: application/json" -d '{"ahoj":"nazdar"}' > /dev/null 2> /dev/null; done
+	for idx in `seq 1 42`; do curl http://localhost:31081/neither_does_this > /dev/null 2> /dev/null &  done
+	for idx in `seq 1 10`; do curl -X POST http://localhost:31081/star -H "Content-Type: application/json" -d '{"ahoj":"nazdar"}' > /dev/null 2> /dev/null &  done

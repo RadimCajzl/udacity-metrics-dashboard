@@ -11,6 +11,9 @@ flask = "^2.3.2"
 requests = "^2.31.0"
 gunicorn = "^20.1.0"
 prometheus-flask-exporter = "^0.22.4"
+opentelemetry-distro = "^0.39b0"
+opentelemetry-exporter-jaeger-thrift = "^1.18.0"
+opentelemetry-instrumentation-flask = "^0.39b0"
 
 
 [tool.poetry.group.dev.dependencies]

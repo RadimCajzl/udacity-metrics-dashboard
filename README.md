@@ -195,6 +195,12 @@ The main goal for uptime SLO is to make sure the application will be available t
 
 Out of scope: application errors (e. g. counting http error status codes). This should be covered by different SLO.
 
+**Proposed SLIs**:
+ - backend-service will be available for 99.95% of the time during every month.
+ - frontend-service will be available for 99.95% of the time during every month.
+ - 99.95% requests to backend-service will be handled within 100 ms every month.
+ - 99.95% requests to frontend-service will be handled within 100 ms every month.
+
 ## Building KPIs for our plan
 *Now that we have our SLIs and SLOs, create a list of 2-3 KPIs to accurately measure these metrics as well as a description of why those KPIs were chosen. We will make a dashboard for this, but first write them down here.*
 
@@ -208,20 +214,27 @@ Out of scope: application errors (e. g. counting http error status codes). This 
    be able to perform any action on our app and thus perceive it as broken/unavailable.
    Frontend also may show weird content confusing the users.
 
- - **KPI**: 99.95% of time each month the `metrics/` endpoint is available in both backend and frontend services.
-  
-   This is a variation on the more conventional `healthz/` endpoint. If either of the two services
-   fails to respond when `metrics/` are requested, it is very likely it won't be able to service
-   other HTTP traffic either. Such cases might not be covered by the first number-of-pods KPI,
-   it might happen that the pod is running but failed to expose HTTP interface.
-
-   Moreover, if we are unable to collect our metrics, we are likely to miss measurements of
-   other KPIs as well.
-   
- - **KPI**: 99.95% requests to the frontend-service will be handled within 100 ms.
+ - **KPI**: 99.95% requests to both frontend- and backend-service will be handled within 100 ms.
 
    If the converse is true (more than 0.05% requests take longer than 100 ms), then low responsibility
    might lead to users' perception of the application as unavailable.
 
 ## Final Dashboard
-*TODO*: Create a Dashboard containing graphs that capture all the metrics of your KPIs and adequately representing your SLIs and SLOs. Include a screenshot of the dashboard here, and write a text description of what graphs are represented in the dashboard.  
+*Create a Dashboard containing graphs that capture all the metrics of your KPIs and adequately representing your SLIs and SLOs. Include a screenshot of the dashboard here, and write a text description of what graphs are represented in the dashboard.*
+
+ - First row: monitoring number of running pods for backend and frontend services.
+   Left side is simple time-series graph, where on the vertical axis we can see number of running pods per service.
+   On right side we can see the same information in heatmap.
+
+   Just by quick look at the horizontal axis or heatmap range we would see if there were moments with less than one pod
+   running for one of the two services. The time component would then allow to identify problematic time intervals.
+
+   The metric is calculated `kube_pod_container_status_running`, aggregated (summed) by container name.
+
+ - Second resp. third row show response times for frontend resp. backend. Left side shows histogram of response times,
+   right side time-distribution.
+
+   These panels show response times. Quick look at the histogram will tell whether we're roughly in good range
+   or not, the time series would help identify problematic time periods.
+
+![KPI dashboard](answer-img/kpi-dashboard.png)
